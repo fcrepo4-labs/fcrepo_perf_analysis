@@ -14,19 +14,21 @@ These scripts perform analysis to answer specific questions about fedora-commons
 1. Check that input data has expected headers
 
     ```
-    cat raw-data/test-4-subset.csv | Rscript 01-check-jmeter-log.r
+    tar -O -xzf example/test-4-small.tgz | Rscript 01-check-jmeter-log.r
     ```
     or
     
     ```
-    Rscript 01-check-jmeter-log.r raw-data/test-4-subset.csv
+    mkdir -p raw-data
+    tar -xzf example/test-4-small.tgz > raw-data/test-4-small.csv
+    Rscript 01-check-jmeter-log.r raw-data/test-4-small.csv
     ```
     The result should be the printed statement: `[1] "Headers MATCH expected fields."`
 1. Run preprocessing and save result into processed-data directory (or pipe directly into subsequent stage)
 
     ```
     mkdir -p processed-data
-    cat raw-data/test-4-subset.csv | Rscript 10-jmeter-create-objects-preprocess.r > processed-data/test-4-created_obj-subset.csv
+    tar -O -xzf example/test-4-small.tgz | Rscript 10-jmeter-create-objects-preprocess.r > processed-data/test-4-created_obj-subset.csv
     ```
    The resulting file will be a subset of the original by taking every 25th of each kind of  Create event. 
    As a side effect this script will generate the file reports/10-create-objects-summareis.txt that contains summary statistics of the event types of interest (i.e. create events)
@@ -42,4 +44,20 @@ These scripts perform analysis to answer specific questions about fedora-commons
     cat processed-data/test-4-created_obj-subset.csv | Rscript 21-jmeter-create-objets-plots.r
     ```
     This script does not print to standard out.  It produces the a series of image files under `reports/` e.g. 21-dot-num_New_Container.png
+
+
+### Run example from test-3
+A convenient copy pasta dish for the example test-3-small data which uses intermediate files instead of piping.
+```
+mkdir -p raw-data
+tar -O -xzf example/test-3-small.tgz > raw-data/test-3-small.csv
+
+Rscript 01-check-jmeter-log.r raw-data/test-3-small.csv 
+
+mkdir -p processed-data
+Rscript 10-jmeter-create-objects-preprocess.r raw-data/test-3-small.csv > processed-data/test-3-created_obj-subset.csv
+
+Rscript 20-jmeter-create-objects-analysis.r processed-data/test-3-created_obj-subset.csv
+Rscript 21-jmeter-create-objects-plots.r processed-data/test-3-created_obj-subset.csv
+```
 
