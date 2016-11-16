@@ -61,3 +61,4 @@ Rscript 20-jmeter-create-objects-analysis.r processed-data/test-3-created_obj-su
 Rscript 21-jmeter-create-objects-plots.r processed-data/test-3-created_obj-subset.csv
 ```
 
+![21-bin-num_binary_resource](https://cloud.githubusercontent.com/assets/1520508/20360390/8ca82740-ac01-11e6-8ab9-f7014c891871.png)
