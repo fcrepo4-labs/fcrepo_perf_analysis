@@ -8,7 +8,7 @@ options <- commandArgs(TRUE)
 if(length(options)==0) {
   input_filename <- 'stdin'
 }else{
-  input_filename <- options[0]
+  input_filename <- options[1]
 }
 
 ##
