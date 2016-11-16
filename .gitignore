@@ -1,0 +1,13 @@
+# Ignore RStudio files
+.Rhistory
+.Rproj.user/
+*.Rproj
+
+# Ignore vim sessions
+*.sess
+
+# Ignore input and build object directories
+processed-data/*
+raw-data/*
+reports/*
+.Rproj.user
