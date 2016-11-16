@@ -7,19 +7,23 @@ These scripts perform analysis to answer specific questions about fedora-commons
 ## Use
 
 1. Run install script to make sure required packages are installed.
+
     ```
     Rscipt 00-install-required-packages.r
     ```
 1. Check that input data has expected headers
+
     ```
     cat raw-data/test-4-subset.csv | Rscript 01-check-jmeter-log.r
     ```
     or
+    
     ```
     Rscript 01-check-jmeter-log.r raw-data/test-4-subset.csv
     ```
     The result should be the printed statement: `[1] "Headers MATCH expected fields."`
 1. Run preprocessing and save result into processed-data directory (or pipe directly into subsequent stage)
+
     ```
     mkdir -p processed-data
     cat raw-data/test-4-subset.csv | Rscript 10-jmeter-create-objects-preprocess.r > processed-data/test-4-created_obj-subset.csv
@@ -27,11 +31,13 @@ These scripts perform analysis to answer specific questions about fedora-commons
    The resulting file will be a subset of the original by taking every 25th of each kind of  Create event. 
    As a side effect this script will generate the file reports/10-create-objects-summareis.txt that contains summary statistics of the event types of interest (i.e. create events)
 1. Run the analysis 
+
     ```
     cat processed-data/test-4-created_obj-subset.csv | Rscript 20-jmeter-create-objects-analysis.r
     ```
    This script does not print to standard out.  It produces the file reports/20-create-objects-stats.txt as a side effect.  That file contains the results of a correlation and linear regression looking at elapsed time and number of create events.
 1. Produce figures
+
     ```
     cat processed-data/test-4-created_obj-subset.csv | Rscript 21-jmeter-create-objets-plots.r
     ```
