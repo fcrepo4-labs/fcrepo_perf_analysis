@@ -9,7 +9,7 @@ These scripts perform analysis to answer specific questions about fedora-commons
 1. Run install script to make sure required packages are installed.
 
     ```
-    Rscipt 00-install-required-packages.r
+    Rscript 00-install-required-packages.r
     ```
 1. Check that input data has expected headers
 
@@ -41,7 +41,7 @@ These scripts perform analysis to answer specific questions about fedora-commons
 1. Produce figures
 
     ```
-    cat processed-data/test-4-created_obj-subset.csv | Rscript 21-jmeter-create-objets-plots.r
+    cat processed-data/test-4-created_obj-subset.csv | Rscript 21-jmeter-create-objects-plots.r
     ```
     This script does not print to standard out.  It produces the a series of image files under `reports/` e.g. 21-dot-num_New_Container.png
 
