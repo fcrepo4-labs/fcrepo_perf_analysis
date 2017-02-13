@@ -17,22 +17,17 @@ open(input_file, blocking=TRUE)
 # Check that the header is as expected 
 expected_fields <- c('timeStamp','elapsed','label','responseCode','responseMessage','threadName','dataType','success','bytes',
                     'grpThreads','allThreads','Latency')
+expected_field_count <- length(expected_fields)
 header_line <- readLines(input_file,n=1)
 header_fields <- unlist(strsplit(header_line,','))
 
-if(length(header_fields) != length(expected_fields) || any(header_fields != expected_fields)){
-  print('Headers DO NOT match expected fields!')
-  print('expected_fields')
-  print(expected_fields)
-  print('header_line')
-  print(header_line)
-  print('header_fields')
-  print(header_line)
-  
+if(length(header_fields) != expected_field_count){
+  print('Unexpected number of input fields!')
+  cat('Expected:', expected_field_count, 'encountered:', length(header_fields))
   close(input_file)
   quit(save='no', status=10)
-}else{
-  print('Headers MATCH expected fields.')
+} else{
+  cat('Expected:', expected_field_count, 'encountered:', length(header_fields))
 }
 
 close(input_file)
