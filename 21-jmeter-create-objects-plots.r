@@ -19,7 +19,7 @@ df <- read.csv(input_file)
 close(input_file)
 
 ### Get names of target columns
-target_column_names <- setdiff(colnames(df), c('elapsed','label'))# Simple linear regression model to answer:
+target_column_names <- setdiff(colnames(df), c('elapsed','label'))
 
 ### Plot each 
 

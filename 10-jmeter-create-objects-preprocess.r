@@ -19,18 +19,27 @@ if(length(options)==0) {
 input_file <- file(input_filename)
 open(input_file, blocking=TRUE)
 
-df <- read.csv(input_file)
+df <- read.csv(input_file, header = FALSE)
 close(input_file)
+
+##
+### Assign headers to be the expected field names
+expected_fields <- c('timeStamp','elapsed','label','responseCode','responseMessage','threadName','dataType','success','bytes',
+                    'grpThreads','allThreads','Latency')
+names(df) <- expected_fields
 
 ##
 ### DEFINE LABELS of INTEREST (target_labels)
 #     e.g. if targeting "Create" events, find all the factors of the label column that start with "Create"
 
-# Get 'label' factor levels that start with Create. These are the target for this analysis. 
-target_labels = grep('^Create', levels(df[,'label']), value=TRUE)
+# Use the PUT Perf Container lablels
+target_labels <- c("PUT Perf Container")
 
-# Make column names that correspond to these labels:
-target_column_names <- gsub('^Create', 'num', target_labels)
+# Make column names that correspond to the target labels.
+#  The target columns will hold the cumulative sum of number of previous events of this type.
+#  This adds the context to each row.
+#  Basically, "Here is the data for a Create_X event, and it is the 400th successful Create_X event."
+target_column_names <- paste('num', target_labels)
 target_column_names <- chartr(' ', '_', target_column_names)
 
 # Make a mask vectors to filter for rows that are for the target label and were successful
@@ -89,5 +98,3 @@ merged_frame <- Reduce(function(...) merge(..., all=TRUE), subsets)
 
 # Print the subset as csv.
 write.csv(merged_frame, row.names=FALSE)
-
-
