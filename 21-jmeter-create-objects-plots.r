@@ -45,7 +45,7 @@ make_bin_plot <- function(column_label, input_data){
 }
 bin_plots <- lapply(target_column_names, FUN=make_bin_plot, df)
 
-# Write plots to file
+# render plots to file
 for(i in 1:length(dot_plots)){
   png_filename <- paste("reports/21-","dot-",bin_plots[[1]]$label$x,".png", sep="") 
   svg_filename <- paste("reports/21-","dot-",bin_plots[[1]]$label$x,".svg", sep="") 
@@ -59,3 +59,6 @@ for(i in 1:length(bin_plots)){
   ggsave(png_filename,plot=bin_plots[[i]],device="png")
   ggsave(svg_filename,plot=bin_plots[[i]],device="svg")
 }
+
+# write plot objects to build artifacts
+save(list=c("dot_plots", "bin_plots"), file="build/object-plots.dat")
