@@ -1,6 +1,7 @@
 # Ignore RStudio files
 .Rhistory
 .Rproj.user/
+.RData
 *.Rproj
 
 # Ignore vim sessions
@@ -10,4 +11,6 @@
 processed-data/*
 raw-data/*
 reports/*
+build/*
+reports*
 .Rproj.user
