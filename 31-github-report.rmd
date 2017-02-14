@@ -1,0 +1,47 @@
+---
+title: "Test Summary"
+output: github_document
+params:
+  input_dir: './build'
+---
+
+```{r setup, include=FALSE}
+# Config knitr
+knitr::opts_chunk$set(echo = TRUE)
+# Load all build artifacts 
+data_files <- list.files(params$input_dir, pattern = "\\.dat$", full.names = TRUE)
+lapply(data_files, load, .GlobalEnv)
+
+```
+
+## Summary Statistics from Raw Data
+
+```{r raw_data_stats}
+
+```
+
+## Summary Statistics of Processed Data 
+
+```{r proc_data_stats}
+
+```
+
+This is an R Markdown format used for publishing markdown documents to GitHub. When you click the **Knit** button all R code chunks are run and a markdown file (.md) suitable for publishing to GitHub is generated.
+
+## Including Code
+
+You can include R code in the document as follows:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
