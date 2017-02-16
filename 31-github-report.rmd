@@ -3,6 +3,7 @@ title: "Test Summary"
 output: github_document
 params:
   input_dir: './build'
+  output_name: ''
 ---
 
 ```{r setup, echo=FALSE, include=FALSE, results='hide'}
@@ -12,7 +13,11 @@ knitr::opts_chunk$set(echo = TRUE, comment = NA, prompt = FALSE)
 data_files <- list.files(params$input_dir, pattern = "\\.dat$", full.names = TRUE)
 lapply(data_files, load, .GlobalEnv)
 ```
-# Report
+
+```{r report_name, echo=FALSE}
+paste("Report Name:",params$output_name)
+```
+
 ## Summary Statistics from Raw Data
 * List of expected columns in the jmeter output
 * List of labels selected for analysis (The kind of events to be analyzed)

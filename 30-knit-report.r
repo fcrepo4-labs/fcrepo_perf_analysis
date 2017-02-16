@@ -21,5 +21,5 @@ if(length(options) < 2){
 
 dir.create(artifacts_dir, showWarnings=FALSE, mode='0664')
 
-rmarkdown::render("31-github-report.rmd", params = list(input_dir = artifacts_dir),
+rmarkdown::render("31-github-report.rmd", params = list(input_dir = artifacts_dir, output_name = output_name),
                   output_file=output_name, output_dir=artifacts_dir)
