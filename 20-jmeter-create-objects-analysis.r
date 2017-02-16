@@ -22,6 +22,7 @@ df <- read.csv(input_file)
 close(input_file)
 
 ### Get names of target columns
+# Any column in the input data not named 'elapsed' or 'label'
 target_column_names <- setdiff(colnames(df), c('elapsed','label'))
 
 # Pearson's correlation coefficient with the assumption 
@@ -32,6 +33,7 @@ make_elapsed_correlation <- function(column_label, input_data){
   return(result)
 }
 cor_results <- lapply(target_column_names, FUN=make_elapsed_correlation, df)
+names(cor_results) <- lapply(target_column_names, function(x){paste("~ elapsed +", x)})
 
 # Simple linear regression model to answer:
 #  how much of the variation in the elapsed time can be accounte for by the variable of interest?
@@ -40,6 +42,10 @@ make_linear_model <- function(column_label, input_data){
   lmodel <- lm(lm_formula, data=input_data, na.action=na.omit)
 }
 lmodels <- lapply(target_column_names, FUN=make_linear_model, df)
+names(lmodels) <- lapply(target_column_names, function(x){paste("lm_forumla:", "elapsed ~", x)})
+
+# Write build artifacts
+save(list=c("lmodels","cor_results"), file="./build/analysis.dat")
 
 # Print results of analysis to file in results directory
 report_dir = './reports'
