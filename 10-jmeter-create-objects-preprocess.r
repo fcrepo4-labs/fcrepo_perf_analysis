@@ -70,8 +70,8 @@ summaries <- mapply(FUN=make_summary, target_column_names, target_success_masks,
 names(summaries) <- paste("elapsed for", target_column_names)
 
 # Print results of analysis to file in results directory
-report_dir = './reports'
-dir.create(report_dir, showWarnings=FALSE, mode='0664')
+report_dir = 'reports'
+dir.create(report_dir, showWarnings=FALSE, mode='0774')
 if(dir.exists(report_dir)){
   outfile <- file(paste(report_dir, '10-create-objects-summaries.txt', sep='/'))
   # start sinking output to file (alternatively could use cat)
@@ -100,8 +100,8 @@ merged_frame <- Reduce(function(...) merge(..., all=TRUE), subsets)
 
 # Serialize pre-subset summary build artifact
 report_dir = './build'
-dir.create(report_dir, showWarnings=FALSE, mode='0664')
-save(list=c("summaries","target_labels"), file="./build/pre-process.dat")
+dir.create(report_dir, showWarnings=FALSE, mode='0774')
+save(list=c("summaries","target_labels", "expected_fields"), file="./build/pre-process.dat")
 
 # Print the subset as csv.
 write.csv(merged_frame, row.names=FALSE)
