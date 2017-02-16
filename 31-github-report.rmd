@@ -5,43 +5,47 @@ params:
   input_dir: './build'
 ---
 
-```{r setup, include=FALSE}
+```{r setup, echo=FALSE, include=FALSE, results='hide'}
 # Config knitr
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, comment = NA, prompt = FALSE)
 # Load all build artifacts 
 data_files <- list.files(params$input_dir, pattern = "\\.dat$", full.names = TRUE)
 lapply(data_files, load, .GlobalEnv)
-
 ```
-
+# Report
 ## Summary Statistics from Raw Data
+* List of expected columns in the jmeter output
+* List of labels selected for analysis (The kind of events to be analyzed)
+* Summary statistics of elapsed time (ms) for each label.
 
-```{r raw_data_stats}
-
+```{r raw_data_stats, echo=FALSE}
+cat("Input column names:\n", paste(expected_fields, sep=","))
+cat("Value of 'label' used for analysis:\n", paste(target_labels, sep=","))
+summaries
 ```
 
-## Summary Statistics of Processed Data 
-
-```{r proc_data_stats}
-
+## Results of Correlation and Linear Modeling 
+How strong is the linear correlation between time elapsed and the number of succesful events? This correlation is performed assuming the elapsed time for each event should be increasing as the cumulative number of events increases.
+A correlation coefficient near zero (< 0.25) indicates no or very weak correlation.
+```{r correlations}
+cor_results
 ```
 
-This is an R Markdown format used for publishing markdown documents to GitHub. When you click the **Knit** button all R code chunks are run and a markdown file (.md) suitable for publishing to GitHub is generated.
-
-## Including Code
-
-You can include R code in the document as follows:
-
-```{r cars}
-summary(cars)
+Answering the question, "Is the time elapsed significantly dependent on the number of successful events of the type being analyzed?"  For example, is the time elapsed dependent on the number of successful "PUT Perf Container" events?
+```{r linear_mods}
+lmodels
 ```
 
-## Including Plots
+## Plots
+Plotting the time elapsed (ms) for each event by the cumulative number of events.
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r bin_plots, echo=FALSE}
+for(i in 1:length(bin_plots)){print(bin_plots[[i]])}
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r dot_plots, echo=FALSE}
+for(i in 1:length(dot_plots)){print(dot_plots[[i]])}
+```
+
+###### Template
+_This report was generated from the template, 31-github-report.rmd_
