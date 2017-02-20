@@ -64,9 +64,9 @@ Plots
 
 Plotting the time elapsed (ms) for each event by the cumulative number of events.
 
-![](/home/grosscol/workspace/fcrepo_perf_analysis/build/test5.pu.postgres-mode5_files/figure-markdown_github/bin_plots-1.png)
+![](test5.pu.postgres-mode5_files/figure-markdown_github/bin_plots-1.png)
 
-![](/home/grosscol/workspace/fcrepo_perf_analysis/build/test5.pu.postgres-mode5_files/figure-markdown_github/dot_plots-1.png)
+![](test5.pu.postgres-mode5_files/figure-markdown_github/dot_plots-1.png)
 
 ###### Template
 
