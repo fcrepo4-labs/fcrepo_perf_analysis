@@ -14,6 +14,7 @@ These scripts perform analysis to answer specific questions about fedora-commons
 ## Use
 
 1. Get your perf.log from running a fcrepo test or use a copy of the test data run by virginia tech as a demo.
+
     ```
     # Pre-existing data from test-4 that can be used as an example
     mkdir raw-data
@@ -21,16 +22,19 @@ These scripts perform analysis to answer specific questions about fedora-commons
     tar -xzf raw-data/test.tgz
     ```
 1. Make required directories.
+
     ```
     mkdir -p processed-data
     mkdir -p build
     mkdir -p reports
     ```
 1. Run install script to make sure required packages are installed.
+
     ```
     Rscript 00-install-required-packages.r
     ```
 1. Check that input data has expected headers
+
     ```
     Rscript 01-check-jmeter-log.r <your/perf.log>
     ```
@@ -40,21 +44,25 @@ These scripts perform analysis to answer specific questions about fedora-commons
     Expected: 12 encountered: 12
     ```
 1. Run preprocessing and save result into processed-data directory
+
     ```
     Rscript 10-jmeter-create-objects-preprocess.r <your/perf.log> > procesed-data/subset.csv
     ```
    The resulting file will be a selected down to 5k events.  As a side effect this script will generate build artifacts (in build/) the file reports/10-create-objects-summariess.txt that contains summary statistics of the event types of interest (i.e. create events)
 1. Run the analysis 
+
     ```
     Rscript 20-jmeter-create-objects-analysis.r processed-data/subset.csv
     ```
    This script does not print to standard out.  It produces the file reports/20-create-objects-stats.txt as a side effect.  That file contains the results of a correlation and linear regression looking at elapsed time and number of create events.
 1. Produce figures
+
     ```
     Rscript 21-jmeter-create-objects-plots.r processed-data/subset.csv
     ```
     This script does not print to standard out.  It produces the a series of build artifacts (in build/) and image files under `reports/` e.g. 21-dot-num_PUT_Perf_Container.png
 1. Produce report
+
     ```
     Rscript 30-knit-report.r ./build report.md
     ```
