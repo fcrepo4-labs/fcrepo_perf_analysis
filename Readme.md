@@ -13,59 +13,49 @@ These scripts perform analysis to answer specific questions about fedora-commons
 
 ## Use
 
+1. Get your perf.log from running a fcrepo test or use a copy of the test data run by virginia tech as a demo.
+    ```
+    # Pre-existing data from test-4 that can be used as an example
+    mkdir raw-data
+    wget https://s3.amazonaws.com/f4-performance-results/test4.pu.postgres.tar.gz -O raw-data/test.tgz
+    tar -xzf raw-data/test.tgz
+    ```
+1. Make required directories.
+    ```
+    mkdir -p processed-data
+    mkdir -p build
+    mkdir -p reports
+    ```
 1. Run install script to make sure required packages are installed.
-
     ```
     Rscript 00-install-required-packages.r
     ```
 1. Check that input data has expected headers
-
     ```
-    tar -O -xzf example/test-4-small.tgz | Rscript 01-check-jmeter-log.r
+    Rscript 01-check-jmeter-log.r <your/perf.log>
     ```
-    or
-    
+    The result should be the printed statement: `
     ```
-    mkdir -p raw-data
-    tar -xzf example/test-4-small.tgz > raw-data/test-4-small.csv
-    Rscript 01-check-jmeter-log.r raw-data/test-4-small.csv
+    Header check:
+    Expected: 12 encountered: 12
     ```
-    The result should be the printed statement: `[1] "Headers MATCH expected fields."`
-1. Run preprocessing and save result into processed-data directory (or pipe directly into subsequent stage)
-
+1. Run preprocessing and save result into processed-data directory
     ```
-    mkdir -p processed-data
-    tar -O -xzf example/test-4-small.tgz | Rscript 10-jmeter-create-objects-preprocess.r > processed-data/test-4-created_obj-subset.csv
+    Rscript 10-jmeter-create-objects-preprocess.r <your/perf.log> > procesed-data/subset.csv
     ```
-   The resulting file will be a subset of the original by taking every 25th of each kind of  Create event. 
-   As a side effect this script will generate the file reports/10-create-objects-summareis.txt that contains summary statistics of the event types of interest (i.e. create events)
+   The resulting file will be a selected down to 5k events.  As a side effect this script will generate build artifacts (in build/) the file reports/10-create-objects-summariess.txt that contains summary statistics of the event types of interest (i.e. create events)
 1. Run the analysis 
-
     ```
-    cat processed-data/test-4-created_obj-subset.csv | Rscript 20-jmeter-create-objects-analysis.r
+    Rscript 20-jmeter-create-objects-analysis.r processed-data/subset.csv
     ```
    This script does not print to standard out.  It produces the file reports/20-create-objects-stats.txt as a side effect.  That file contains the results of a correlation and linear regression looking at elapsed time and number of create events.
 1. Produce figures
-
     ```
-    cat processed-data/test-4-created_obj-subset.csv | Rscript 21-jmeter-create-objects-plots.r
+    Rscript 21-jmeter-create-objects-plots.r processed-data/subset.csv
     ```
-    This script does not print to standard out.  It produces the a series of image files under `reports/` e.g. 21-dot-num_New_Container.png
-
-
-### Run example from test-3
-A convenient copy pasta dish for the example test-3-small data which uses intermediate files instead of piping.
-```
-mkdir -p raw-data
-tar -O -xzf example/test-3-small.tgz > raw-data/test-3-small.csv
-
-Rscript 01-check-jmeter-log.r raw-data/test-3-small.csv 
-
-mkdir -p processed-data
-Rscript 10-jmeter-create-objects-preprocess.r raw-data/test-3-small.csv > processed-data/test-3-created_obj-subset.csv
-
-Rscript 20-jmeter-create-objects-analysis.r processed-data/test-3-created_obj-subset.csv
-Rscript 21-jmeter-create-objects-plots.r processed-data/test-3-created_obj-subset.csv
-```
-
-![21-bin-num_binary_resource](https://cloud.githubusercontent.com/assets/1520508/20360390/8ca82740-ac01-11e6-8ab9-f7014c891871.png)
+    This script does not print to standard out.  It produces the a series of build artifacts (in build/) and image files under `reports/` e.g. 21-dot-num_PUT_Perf_Container.png
+1. Produce report
+    ```
+    Rscript 30-knit-report.r ./build report.md
+    ```
+    This script will knit together the build artifacts and produce a report.md, report.html, and report_files and move them into ./build.
