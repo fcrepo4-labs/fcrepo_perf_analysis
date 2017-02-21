@@ -18,52 +18,38 @@ These scripts perform analysis to answer specific questions about fedora-commons
     ```
     # Pre-existing data from test-4 that can be used as an example
     mkdir raw-data
-    wget https://s3.amazonaws.com/f4-performance-results/test4.pu.postgres.tar.gz -O raw-data/test.tgz
-    tar -xzf raw-data/test.tgz
+    wget https://s3.amazonaws.com/f4-performance-results/test4.pu.postgres.tar.gz -O ./raw-data/test.tgz
+    tar -C raw-data -xzf raw-data/test.tgz
     ```
-1. Make required directories.
+2. Run Analysis. Substitutue `your/perf.log` with the perf.log from your own tests or the one obtained from S3.
 
     ```
+    # Make directories.
     mkdir -p processed-data
     mkdir -p build
     mkdir -p reports
-    ```
-1. Run install script to make sure required packages are installed.
 
-    ```
+    # Run install script to make sure required packages are installed.
     Rscript 00-install-required-packages.r
-    ```
-1. Check that input data has expected headers
 
-    ```
-    Rscript 01-check-jmeter-log.r <your/perf.log>
-    ```
-    The result should be the printed statement: `
-    ```
-    Header check:
-    Expected: 12 encountered: 12
-    ```
-1. Run preprocessing and save result into processed-data directory
+    # Check that input data has expected headers
+    #   The result should be the printed statement: `
+    #   Header check:
+    #   Expected: 12 encountered: 12
+    Rscript 01-check-jmeter-log.r your/perf.log
 
-    ```
-    Rscript 10-jmeter-create-objects-preprocess.r <your/perf.log> > procesed-data/subset.csv
-    ```
-   The resulting file will be a selected down to 5k events.  As a side effect this script will generate build artifacts (in build/) the file reports/10-create-objects-summariess.txt that contains summary statistics of the event types of interest (i.e. create events)
-1. Run the analysis 
+    # Run preprocessing and save result into processed-data directory.
+    Rscript 10-jmeter-create-objects-preprocess.r your/perf.log > procesed-data/subset.csv
 
-    ```
+    # Run the analysis 
     Rscript 20-jmeter-create-objects-analysis.r processed-data/subset.csv
-    ```
-   This script does not print to standard out.  It produces the file reports/20-create-objects-stats.txt as a side effect.  That file contains the results of a correlation and linear regression looking at elapsed time and number of create events.
-1. Produce figures
 
-    ```
+    # Produce figures
     Rscript 21-jmeter-create-objects-plots.r processed-data/subset.csv
-    ```
-    This script does not print to standard out.  It produces the a series of build artifacts (in build/) and image files under `reports/` e.g. 21-dot-num_PUT_Perf_Container.png
-1. Produce report
 
-    ```
+    # Produce report
     Rscript 30-knit-report.r ./build report.md
     ```
-    This script will knit together the build artifacts and produce a report.md, report.html, and report_files and move them into ./build.
+
+## Reports
+Generated reports for test runs are in [dist](dist/). 
