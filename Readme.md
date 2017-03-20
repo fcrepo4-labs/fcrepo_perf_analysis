@@ -21,7 +21,7 @@ These scripts perform analysis to answer specific questions about fedora-commons
     wget https://s3.amazonaws.com/f4-performance-results/test4.pu.postgres.tar.gz -O ./raw-data/test.tgz
     tar -C raw-data -xzf raw-data/test.tgz
     ```
-2. Run Analysis. Substitutue `your/perf.log` with the perf.log from your own tests or the one obtained from S3.
+2. Run Analysis. Substitutue `example/test4-perf.log` with the perf.log from your own tests or the one obtained from S3.
 
     ```
     # Make directories.
@@ -36,10 +36,10 @@ These scripts perform analysis to answer specific questions about fedora-commons
     #   The result should be the printed statement: `
     #   Header check:
     #   Expected: 12 encountered: 12
-    Rscript 01-check-jmeter-log.r your/perf.log
+    Rscript 01-check-jmeter-log.r example/test4-perf.log
 
     # Run preprocessing and save result into processed-data directory.
-    Rscript 10-jmeter-create-objects-preprocess.r your/perf.log > procesed-data/subset.csv
+    Rscript 10-jmeter-create-objects-preprocess.r example/test4-perf.log > processed-data/subset.csv
 
     # Run the analysis 
     Rscript 20-jmeter-create-objects-analysis.r processed-data/subset.csv
